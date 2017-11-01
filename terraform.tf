@@ -7,6 +7,8 @@ resource "aws_instance" "my_instance" {
   instance_type = "t2.micro"
 
   security_groups = ["${aws_security_group.my_security_group.name}"]
+
+  iam_instance_profile = "${aws_iam_instance_profile.my_instance_profile.id}"
 }
 
 resource "aws_security_group" "my_security_group" {
@@ -19,4 +21,30 @@ resource "aws_security_group" "my_security_group" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+resource "aws_iam_instance_profile" "my_instance_profile" {
+  name = "terraform-workshop-instance-profile"
+  role = "${aws_iam_role.my_role.name}"
+}
+
+resource "aws_iam_role" "my_role" {
+  name = "terraform-workshop-role"
+  path = "/"
+
+  assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "sts:AssumeRole",
+            "Principal": {
+               "Service": "ec2.amazonaws.com"
+            },
+            "Effect": "Allow",
+            "Sid": ""
+        }
+    ]
+}
+EOF
 }
