@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "my_instance" {
-  ami           = "ami-acd005d5" # Amazon Linux AMI 2017.09
+  ami           = "${data.aws_ami.amazon_linux.id}"
   instance_type = "t2.micro"
 
   security_groups = ["${aws_security_group.my_security_group.name}"]
@@ -11,6 +11,13 @@ resource "aws_instance" "my_instance" {
   iam_instance_profile = "${aws_iam_instance_profile.my_instance_profile.id}"
 
   tags = "${var.tags}"
+}
+
+data "aws_ami" "amazon_linux" {
+  filter {
+    name   = "description"
+    values = ["Amazon Linux AMI 2017.09.0.20170930 x86_64 HVM GP2"]
+  }
 }
 
 resource "aws_security_group" "my_security_group" {
