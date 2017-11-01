@@ -9,6 +9,8 @@ resource "aws_instance" "my_instance" {
   security_groups = ["${aws_security_group.my_security_group.name}"]
 
   iam_instance_profile = "${aws_iam_instance_profile.my_instance_profile.id}"
+
+  tags = "${var.tags}"
 }
 
 resource "aws_security_group" "my_security_group" {

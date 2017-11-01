@@ -1,0 +1,3 @@
+tags {
+  Name = "terraform-workshop"
+}
